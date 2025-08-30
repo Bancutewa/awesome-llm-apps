@@ -3,10 +3,14 @@ from agno.agent import Agent
 from agno.tools.serpapi import SerpApiTools
 import streamlit as st
 import re
-from agno.models.openai import OpenAIChat
+from agno.models.groq import Groq
 from icalendar import Calendar, Event
 from datetime import datetime, timedelta
+from dotenv import load_dotenv
+import os
 
+# Load environment variables
+load_dotenv()
 
 def generate_ics_content(plan_text:str, start_date: datetime = None) -> bytes:
     """
@@ -58,36 +62,38 @@ def generate_ics_content(plan_text:str, start_date: datetime = None) -> bytes:
     return cal.to_ical()
 
 # Set up the Streamlit app
-st.title("AI Travel Planner ")
-st.caption("Plan your next adventure with AI Travel Planner by researching and planning a personalized itinerary on autopilot using GPT-4o")
+st.title("🤖 AI Travel Planner")
+st.caption("Lập kế hoạch chuyến đi mơ ước với AI Travel Planner - tự động nghiên cứu và tạo lịch trình cá nhân hóa bằng trí tuệ nhân tạo")
 
 # Initialize session state to store the generated itinerary
 if 'itinerary' not in st.session_state:
     st.session_state.itinerary = None
 
 # Get OpenAI API key from user
-openai_api_key = st.text_input("Enter OpenAI API Key to access GPT-4o", type="password")
+openai_api_key = os.getenv("GROQ_API_KEY")
 
 # Get SerpAPI key from the user
-serp_api_key = st.text_input("Enter Serp API Key for Search functionality", type="password")
+serp_api_key = os.getenv("SERPAPI_API_KEY")
 
 if openai_api_key and serp_api_key:
     researcher = Agent(
         name="Researcher",
         role="Searches for travel destinations, activities, and accommodations based on user preferences",
-        model=OpenAIChat(id="gpt-4o", api_key=openai_api_key),
+        model=Groq(id="llama3-8b-8192", api_key=openai_api_key),
         description=dedent(
             """\
-        You are a world-class travel researcher. Given a travel destination and the number of days the user wants to travel for,
-        generate a list of search terms for finding relevant travel activities and accommodations.
-        Then search the web for each term, analyze the results, and return the 10 most relevant results.
+        Bạn là một nhà nghiên cứu du lịch hàng đầu thế giới. Khi nhận được điểm đến du lịch và số ngày du lịch của người dùng,
+        hãy tạo ra danh sách các từ khóa tìm kiếm để tìm các hoạt động du lịch và chỗ ở phù hợp.
+        Sau đó tìm kiếm trên web cho từng từ khóa, phân tích kết quả, và trả về 10 kết quả liên quan nhất.
+        Tất cả thông tin phải được trình bày bằng tiếng Việt.
         """
         ),
         instructions=[
-            "Given a travel destination and the number of days the user wants to travel for, first generate a list of 3 search terms related to that destination and the number of days.",
-            "For each search term, `search_google` and analyze the results."
-            "From the results of all searches, return the 10 most relevant results to the user's preferences.",
-            "Remember: the quality of the results is important.",
+            "Khi nhận được điểm đến du lịch và số ngày du lịch của người dùng, trước tiên hãy tạo ra danh sách 3 từ khóa tìm kiếm liên quan đến điểm đến đó và số ngày.",
+            "Đối với mỗi từ khóa tìm kiếm, hãy sử dụng `search_google` và phân tích kết quả. Ưu tiên tìm kiếm thông tin bằng tiếng Việt.",
+            "Từ kết quả của tất cả các tìm kiếm, trả về 10 kết quả liên quan nhất với sở thích của người dùng.",
+            "Hãy nhớ: chất lượng của kết quả rất quan trọng.",
+            "Tất cả kết quả trả về phải được trình bày bằng tiếng Việt.",
         ],
         tools=[SerpApiTools(api_key=serp_api_key)],
         add_datetime_to_instructions=True,
@@ -95,47 +101,50 @@ if openai_api_key and serp_api_key:
     planner = Agent(
         name="Planner",
         role="Generates a draft itinerary based on user preferences and research results",
-        model=OpenAIChat(id="gpt-4o", api_key=openai_api_key),
+        model=Groq(id="deepseek-r1-distill-llama-70b", api_key=openai_api_key),
         description=dedent(
             """\
-        You are a senior travel planner. Given a travel destination, the number of days the user wants to travel for, and a list of research results,
-        your goal is to generate a draft itinerary that meets the user's needs and preferences.
+        Bạn là một nhà lập kế hoạch du lịch chuyên nghiệp. Dựa trên điểm đến, số ngày du lịch và kết quả nghiên cứu,
+        hãy tạo ra lịch trình du lịch chi tiết bao gồm các hoạt động và chỗ ở được đề xuất.
+        Tất cả nội dung phải được trình bày bằng tiếng Việt một cách tự nhiên và hấp dẫn.
         """
         ),
         instructions=[
-            "Given a travel destination, the number of days the user wants to travel for, and a list of research results, generate a draft itinerary that includes suggested activities and accommodations.",
-            "Ensure the itinerary is well-structured, informative, and engaging.",
-            "Ensure you provide a nuanced and balanced itinerary, quoting facts where possible.",
-            "Remember: the quality of the itinerary is important.",
-            "Focus on clarity, coherence, and overall quality.",
-            "Never make up facts or plagiarize. Always provide proper attribution.",
+            "Tạo lịch trình du lịch chi tiết với các hoạt động và chỗ ở được đề xuất.",
+            "Đảm bảo lịch trình được cấu trúc tốt, thông tin và hấp dẫn.",
+            "Đảm bảo cung cấp lịch trình đa dạng và cân bằng, trích dẫn sự thật khi có thể.",
+            "Hãy nhớ: chất lượng của lịch trình rất quan trọng.",
+            "Tập trung vào sự rõ ràng, mạch lạc và chất lượng tổng thể.",
+            "Không bao giờ bịa đặt sự thật hoặc đạo văn. Luôn trích dẫn nguồn gốc khi cần thiết.",
+            "Tất cả nội dung phải được viết bằng tiếng Việt một cách tự nhiên và thân thiện.",
         ],
         add_datetime_to_instructions=True,
     )
 
     # Input fields for the user's destination and the number of days they want to travel for
-    destination = st.text_input("Where do you want to go?")
-    num_days = st.number_input("How many days do you want to travel for?", min_value=1, max_value=30, value=7)
+    destination = st.text_input("Bạn muốn đi đâu?")
+    num_days = st.number_input("Bạn muốn đi bao nhiêu ngày?", min_value=1, max_value=30, value=7)
 
     col1, col2 = st.columns(2)
 
     with col1:
-        if st.button("Generate Itinerary"):
-            with st.spinner("Researching your destination..."):
+        if st.button("🎯 Tạo lịch trình"):
+            with st.spinner("🔍 Đang nghiên cứu điểm đến..."):
                 # First get research results
-                research_results = researcher.run(f"Research {destination} for a {num_days} day trip", stream=False)
+                research_results = researcher.run(f"Nghiên cứu {destination} cho chuyến đi {num_days} ngày", stream=False)
 
                 # Show research progress
-                st.write(" Research completed")
-                
-            with st.spinner("Creating your personalized itinerary..."):
+                st.write("✅ Hoàn thành nghiên cứu")
+
+            with st.spinner("📝 Đang tạo lịch trình cá nhân hóa..."):
                 # Pass research results to planner
                 prompt = f"""
-                Destination: {destination}
-                Duration: {num_days} days
-                Research Results: {research_results.content}
-                
-                Please create a detailed itinerary based on this research.
+                Điểm đến: {destination}
+                Thời lượng: {num_days} ngày
+                Kết quả nghiên cứu: {research_results.content}
+
+                Hãy tạo lịch trình du lịch chi tiết bằng tiếng Việt dựa trên kết quả nghiên cứu này.
+                Đảm bảo lịch trình hấp dẫn, thực tế và phù hợp với văn hóa Việt Nam.
                 """
                 response = planner.run(prompt, stream=False)
                 # Store the response in session state
@@ -150,8 +159,8 @@ if openai_api_key and serp_api_key:
             
             # Provide the file for download
             st.download_button(
-                label="Download Itinerary as Calendar (.ics)",
+                label="📅 Tải lịch trình (.ics)",
                 data=ics_content,
-                file_name="travel_itinerary.ics",
+                file_name="lich_trinh_du_lich.ics",
                 mime="text/calendar"
             )

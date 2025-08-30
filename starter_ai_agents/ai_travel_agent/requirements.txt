@@ -3,3 +3,4 @@ agno
 openai
 google-search-results
 icalendar
+groq
