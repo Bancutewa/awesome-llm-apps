@@ -1,43 +1,63 @@
 import os
 from uuid import uuid4
-from agno.agent import Agent
-from agno.models.openai import OpenAIChat
+from agno.agent import Agent, RunResponse
+from agno.models.google import Gemini
 from agno.tools.eleven_labs import ElevenLabsTools
 from agno.tools.firecrawl import FirecrawlTools
-from agno.agent import Agent, RunResponse
 from agno.utils.audio import write_audio_to_file
 from agno.utils.log import logger
 import streamlit as st
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Streamlit Page Setup
 st.set_page_config(page_title="📰 ➡️ 🎙️ Blog to Podcast Agent", page_icon="🎙️")
 st.title("📰 ➡️ 🎙️ Blog to Podcast Agent")
 
-# Sidebar: API Keys
-st.sidebar.header("🔑 API Keys")
 
-openai_api_key = st.sidebar.text_input("OpenAI API Key", type="password")
-elevenlabs_api_key = st.sidebar.text_input("ElevenLabs API Key", type="password")
-firecrawl_api_key = st.sidebar.text_input("Firecrawl API Key", type="password")
+gemini_api_key = os.getenv("GEMINI_API_KEY")
+elevenlabs_api_key = os.getenv("ELEVEN_LABS_API_KEY")
+firecrawl_api_key = os.getenv("FIRECRAWL_API_KEY")
 
 # Check if all keys are provided
-keys_provided = all([openai_api_key, elevenlabs_api_key, firecrawl_api_key])
+keys_provided = all([gemini_api_key, elevenlabs_api_key, firecrawl_api_key])
+
+# Voice Options - Updated with better Vietnamese voices
+VOICE_OPTIONS = {
+    # Vietnamese Voices (better quality)
+    "Nguyễn Ngân (Female, Vietnamese)": "DvG3I1kDzdBY3u4EzYh6",         
+    "Nhật Phong (Male, Vietnamese)": "RxhjHDfpO54FYotYtKpw",      # Using high-quality voice
+
+    # Popular International Voices
+    "Rachel (Female, American)": "21m00Tcm4TlvDq8ikWAM",
+    "Drew (Male, American)": "29vD33N1CtxCmqQRPOHJ",
+
+}
 
 # Input: Blog URL
 url = st.text_input("Enter the Blog URL:", "")
+
+# Voice Selection
+selected_voice = st.selectbox(
+    "🎤 Choose Voice:",
+    options=list(VOICE_OPTIONS.keys()),
+    index=list(VOICE_OPTIONS.keys()).index("Nguyễn Ngân (Female, Vietnamese)"),  # Default to Vietnamese
+    help="Select the voice for your podcast"
+)
 
 # Button: Generate Podcast
 generate_button = st.button("🎙️ Generate Podcast", disabled=not keys_provided)
 
 if not keys_provided:
-    st.warning("Please enter all required API keys to enable podcast generation.")
+    st.warning("Please provide all required API keys to enable podcast generation.")
 
 if generate_button:
     if url.strip() == "":
         st.warning("Please enter a blog URL first.")
     else:
         # Set API keys as environment variables for Agno and Tools
-        os.environ["OPENAI_API_KEY"] = openai_api_key
+        os.environ["GEMINI_API_KEY"] = gemini_api_key
         os.environ["ELEVEN_LABS_API_KEY"] = elevenlabs_api_key
         os.environ["FIRECRAWL_API_KEY"] = firecrawl_api_key
 
@@ -46,26 +66,27 @@ if generate_button:
                 blog_to_podcast_agent = Agent(
                     name="Blog to Podcast Agent",
                     agent_id="blog_to_podcast_agent",
-                    model=OpenAIChat(id="gpt-4o"),
+                    model=Gemini(id="gemini-2.0-flash-exp", api_key=gemini_api_key),
                     tools=[
                         ElevenLabsTools(
-                            voice_id="JBFqnCBsd6RMkjVDRZzb",
-                            model_id="eleven_multilingual_v2",
+                            voice_id=VOICE_OPTIONS[selected_voice],
+                            model_id="eleven_turbo_v2_5",
                             target_directory="audio_generations",
+                            api_key=elevenlabs_api_key,
                         ),
-                        FirecrawlTools(),
+                        FirecrawlTools(api_key=firecrawl_api_key),
                     ],
                     description="You are an AI agent that can generate audio using the ElevenLabs API.",
                     instructions=[
                         "When the user provides a blog URL:",
                         "1. Use FirecrawlTools to scrape the blog content",
-                        "2. Create a concise summary of the blog content that is NO MORE than 2000 characters long",
+                        "2. Create a concise summary of the blog content that is NO MORE than 3000 characters long",
                         "3. The summary should capture the main points while being engaging and conversational",
                         "4. Use the ElevenLabsTools to convert the summary to audio",
-                        "Ensure the summary is within the 2000 character limit to avoid ElevenLabs API limits",
+                        "Ensure the summary is within the 3000 character limit to avoid ElevenLabs API limits",
                     ],
-                    markdown=True,
-                    debug_mode=True,
+                    markdown=True, # Markdown mode to print the output of the agent
+                    debug_mode=True, # Debug mode to print the output of the agent
                 )
 
                 podcast: RunResponse = blog_to_podcast_agent.run(
