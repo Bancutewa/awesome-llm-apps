@@ -34,3 +34,18 @@ pids
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 /generated/prisma
+
+# AI Generated Files
+**/audio_generations/
+**/*.wav
+**/*.mp3
+**/*.flac
+**/*.aac
+
+# images
+**/demo_images/
+
+# Temporary audio files
+temp_audio/
+temp/*.wav
+temp/*.mp3
