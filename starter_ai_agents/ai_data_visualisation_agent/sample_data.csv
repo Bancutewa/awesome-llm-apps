@@ -1,0 +1,16 @@
+category,item,price,rating,reviews
+Electronics,Smartphone,299.99,4.5,1250
+Electronics,Laptop,899.99,4.2,890
+Electronics,Tablet,199.99,4.0,567
+Clothing,T-Shirt,19.99,4.3,234
+Clothing,Jeans,49.99,4.1,189
+Clothing,Shoes,79.99,4.4,312
+Books,Novel,12.99,4.6,445
+Books,Textbook,89.99,3.8,123
+Books,Magazine,5.99,4.0,78
+Home,Chair,149.99,4.2,156
+Home,Table,299.99,4.1,98
+Home,Lamp,39.99,4.3,201
+Food,Coffee,8.99,4.4,567
+Food,Sandwich,6.99,4.2,234
+Food,Pizza,12.99,4.5,445

@@ -5,11 +5,11 @@
 ### ✅ **ĐÃ HOÀN THÀNH**
 
 - [x] **Phase 1: Thiết lập môi trường** (100% hoàn thành)
-- [x] **Phase 2: Starter AI Agents** - Dự án 2/13 (AI Travel Agent & AI Blog to Podcast Agent - 100% hoàn thành)
+- [x] **Phase 2: Starter AI Agents** - Dự án 5/13 (AI Travel Agent, AI Blog to Podcast Agent, AI Breakup Recovery Agent, AI Data Analysis Agent, AI Data Visualisation Agent - 100% hoàn thành)
 
 ### 🔄 **ĐANG HỌC**
 
-- **Phase 2: Starter AI Agents** - Dự án 4/13 (Tiếp theo: AI Data Analysis Agent)
+- **Phase 2: Starter AI Agents** - Dự án 5/13 (Tiếp theo: AI Medical Imaging Agent)
 
 ### ⏳ **CHƯA BẮT ĐẦU**
 
@@ -89,17 +89,44 @@
 - **Error Handling & Logging:** Robust error handling với detailed logging
 - **User Experience Design:** Intuitive UI cho sensitive emotional topics
 
-#### **2.4 AI Data Analysis Agent** ⏳
+#### **2.4 AI Data Analysis Agent** ✅ **HOÀN THÀNH**
 
-- [ ] Dịch README sang tiếng Việt
-- [ ] Giải thích dự án và code
-- [ ] Chạy thử và debug nếu cần
+- [x] Dịch README sang tiếng Việt
+- [x] Giải thích dự án và code
+- [x] Chạy thử và debug nếu cần
 
-#### **2.5 AI Data Visualisation Agent** ⏳
+**📚 Kiến thức đã học:**
 
-- [ ] Dịch README sang tiếng Việt
-- [ ] Giải thích dự án và code
-- [ ] Chạy thử và debug nếu cần
+- **Natural Language to SQL (NL2SQL) Pattern:** Chuyển đổi câu hỏi tự nhiên thành SQL queries
+- **DuckDB Integration:** Database OLAP hiệu quả cho data analysis
+- **Data Processing Pipeline:** File upload, type inference, schema creation
+- **Gemini Model Integration:** Sử dụng Gemini 2.0 Flash với Agno Agent framework
+- **Framework Compatibility:** Giải quyết vấn đề tương thích giữa phi và agno frameworks
+- **Manual SQL Execution:** Tích hợp DuckDB trực tiếp thay vì qua DuckDbAgent
+- **SQL Query Extraction:** Regex parsing để extract SQL từ AI response
+- **Data Type Inference:** Tự động detect và convert data types
+- **Temporary File Management:** Secure handling của uploaded files
+- **Error Handling & UX:** Comprehensive error handling và user feedback
+- **Context-Aware Prompting:** Cung cấp schema và sample data cho AI
+
+#### **2.5 AI Data Visualisation Agent** ✅ **HOÀN THÀNH**
+
+- [x] Dịch README sang tiếng Việt
+- [x] Giải thích dự án và code
+- [x] Chạy thử và debug nếu cần
+
+**📚 Kiến thức đã học:**
+
+- **AI-Powered Data Analysis Pattern:** Sử dụng LLM để phân tích dữ liệu và tạo visualizations tự động
+- **Code Interpreter Integration:** E2B Sandbox - môi trường sandbox đám mây an toàn cho code execution
+- **Multi-Model AI Support:** 4 models khác nhau cho các task khác nhau (Meta-Llama 3.1 405B, DeepSeek V3, Qwen 2.5 7B, Meta-Llama 3.3 70B)
+- **Natural Language to Code (NL2Code):** Chuyển đổi câu hỏi tự nhiên thành Python code
+- **Code Extraction & Execution:** Regex-based code extraction và sandbox execution
+- **Multi-Format Result Processing:** Handle PNG, matplotlib, plotly, dataframes
+- **Base64 Image Decoding:** Xử lý encoded image data từ sandbox
+- **Streamlit Session State Management:** Quản lý API keys và model selection
+- **Error Handling & UX:** Comprehensive error handling cho code generation và execution
+- **System Prompt Engineering:** Context-aware prompting với dataset path injection
 
 #### **2.6 AI Medical Imaging Agent** ⏳
 
@@ -310,14 +337,14 @@
 ### **Tổng quan:**
 
 - **Tổng số dự án:** ~80+ dự án
-- **Đã hoàn thành:** 3 dự án (3.75%)
-- **Đang học:** 1 dự án (Phase 2.4)
-- **Chưa bắt đầu:** 77+ dự án
+- **Đã hoàn thành:** 5 dự án (6.25%)
+- **Đang học:** 1 dự án (Phase 2.6)
+- **Chưa bắt đầu:** 75+ dự án
 
 ### **Theo Phase:**
 
 - **Phase 1:** ✅ 100% hoàn thành
-- **Phase 2:** 🔄 23.1% hoàn thành (3/13)
+- **Phase 2:** 🔄 38.5% hoàn thành (5/13)
 - **Phase 3-13:** ⏳ 0% hoàn thành
 
 ---
@@ -326,9 +353,9 @@
 
 ### **Ngay lập tức:**
 
-1. ✅ **Đã hoàn thành AI Breakup Recovery Agent** (Phase 2.3)
-2. **Tiếp tục với AI Data Analysis Agent** (Phase 2.4)
-3. **Mục tiêu:** Hoàn thành ít nhất 4 dự án Phase 2 trong tuần này
+1. ✅ **Đã hoàn thành AI Data Visualisation Agent** (Phase 2.5)
+2. **Tiếp tục với AI Medical Imaging Agent** (Phase 2.6)
+3. **Mục tiêu:** Hoàn thành ít nhất 6 dự án Phase 2 trong tuần này
 
 ### **Tuần tới:**
 
@@ -359,6 +386,22 @@
 10. **Multi-Agent Emotional Support:** 4 roles chuyên biệt (Therapist, Closure, Planner, Honesty)
 11. **Gemini Vision Integration:** Phân tích screenshots chat với AI vision
 12. **Sensitive Topic Handling:** Xử lý chủ đề nhạy cảm với sự thấu hiểu
+13. **Natural Language to SQL (NL2SQL):** Chuyển đổi câu hỏi tự nhiên thành SQL queries
+14. **DuckDB Integration:** Database OLAP hiệu quả cho data analysis
+15. **Data Processing Pipeline:** File upload, type inference, schema creation
+16. **Gemini Model Integration:** Sử dụng Gemini 2.0 Flash với Agno Agent framework
+17. **Framework Compatibility:** Giải quyết vấn đề tương thích giữa phi và agno frameworks
+18. **Manual SQL Execution:** Tích hợp DuckDB trực tiếp thay vì qua DuckDbAgent
+19. **SQL Query Extraction:** Regex parsing để extract SQL từ AI response
+20. **Context-Aware Prompting:** Cung cấp schema và sample data cho AI
+21. **AI-Powered Data Analysis Pattern:** Sử dụng LLM để phân tích dữ liệu và tạo visualizations tự động
+22. **Code Interpreter Integration:** E2B Sandbox - môi trường sandbox đám mây an toàn cho code execution
+23. **Multi-Model AI Support:** 4 models khác nhau cho các task khác nhau
+24. **Natural Language to Code (NL2Code):** Chuyển đổi câu hỏi tự nhiên thành Python code
+25. **Code Extraction & Execution:** Regex-based code extraction và sandbox execution
+26. **Multi-Format Result Processing:** Handle PNG, matplotlib, plotly, dataframes
+27. **Base64 Image Decoding:** Xử lý encoded image data từ sandbox
+28. **System Prompt Engineering:** Context-aware prompting với dataset path injection
 
 ### **Best Practices đã học:**
 
@@ -370,11 +413,21 @@
 - Multi-modal output handling (text + audio)
 - Voice selection cho user experience
 - Audio file management và cleanup
+- Framework compatibility solutions (phi vs agno)
+- Manual SQL execution với DuckDB
+- SQL query extraction từ AI responses
+- Context-aware prompting với schema information
+- Code interpreter integration với E2B sandbox
+- Multi-model AI strategy cho different tasks
+- Natural language to code generation
+- Multi-format result processing và visualization
+- Base64 image decoding từ sandbox results
+- System prompt engineering với context injection
 
 ### **Công cụ đã setup:**
 
 - Python environment ✅
-- API Keys (OpenAI, Groq, Gemini, SerpAPI, ElevenLabs, Firecrawl) ✅
+- API Keys (OpenAI, Groq, Gemini, SerpAPI, ElevenLabs, Firecrawl, Together AI, E2B) ✅
 - VS Code với extensions ✅
 - Git repository ✅
 
